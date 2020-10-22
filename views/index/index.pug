@@ -6,9 +6,18 @@ block content
   h1= title
   p Welcome to #{title}
   div(id='board' style="width:450px")
+  label Status:
+  div(id='status')
+  label FEN:
+  div(id='fen')
+  label PGN:
+  div(id='pgn')
 
   //include chessboardjs
   include ./chessboardjs
+  // include chessjs
+  include ./chessjs
   //include the board
   include ./board.pug
+
 
