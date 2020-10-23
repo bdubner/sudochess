@@ -3,23 +3,29 @@
 /**
  * Module dependencies.
  */
-
-var app = require('../app');
-var debug = require('debug')('intellij:server');
-var http = require('http');
+const app = require('../app');
+const debug = require('debug')('intellij:server');
+const http = require('http');
+const sudoServer = require("../servers/sudoServer");
 
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
+const server = http.createServer(app);
 
-var server = http.createServer(app);
+const io = require('socket.io').listen(server);
+sudoServer(io);
+
+/**
+ * Create socket with options
+ */
+
 
 /**
  * Listen on provided port, on all network interfaces.
