@@ -1,10 +1,12 @@
  function Board() {
-    var game = new Chess()
-    var socket;
-    var $status = $('#status')
-    var $fen = $('#fen')
-    var $pgn = $('#pgn')
 
+    var game = new Chess();
+    var socket;
+    var $status = $('#status');
+    var $fen = $('#fen');
+    var $pgn = $('#pgn');
+
+    var playerColor;
     var whiteSquareGrey = '#a9a9a9'
     var blackSquareGrey = '#696969'
 
@@ -79,7 +81,8 @@
         if (game.game_over()) return false
 
         // only pick up pieces for the side to move
-        if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+        if (playerColor !== game.turn() ||
+            (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
             (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
             return false
         }
@@ -97,9 +100,11 @@
             promotion: 'q' // NOTE: always promote to a queen for example simplicity
         })
 
+
         // illegal move
         if (move === null) return 'snapback'
-
+        socket.sendMove(move);
+        game.move()
         updateStatus()
     };
 
@@ -108,6 +113,7 @@
     const onSnapEnd = () => {
         board.position(game.fen())
     };
+
 
 
     const config = {
@@ -123,10 +129,11 @@
         setSocket:function(newSocket){
             socket = newSocket;
         },
-        setOrientation:function(playerColor){
-            color = playerColor.charAt(0).toLowerCase();
-            if(color=='w' || color=='b')
-                board.orientation(playerColor);
+        setPlayerColor:function(color){
+            let colorChar = color.charAt(0).toLowerCase();
+            if(colorChar==='w' || colorChar==='b')
+                playerColor = colorChar;
+                board.orientation(color);
         },
         setFenPosition:function(){
             board.position(game.fen());
@@ -140,8 +147,9 @@
         isGameOver:function(){
             return game.game_over();
         },
-        makeMove:function(source, target, promo ){
-            game.move({from:source,to:target,promotion:promo});//chessEngine.prepareAiMove();
+        move:function(move){
+            game.move(move);
+            board.position(game.fen(),false);
         },
         reset:function(){
             game.reset();
