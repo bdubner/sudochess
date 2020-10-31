@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+    form(action="/login" method="post")
+        div(class="form-group")
+            label(for="usernameInput") Username:
+            input(type="text" id="usernameInput" name="username" class="form-control" placeholder="username")
+        div(class="form-group")
+            label(for="pwInput") Password:
+            input(type="password" id="pwInput" name="password" class="form-control" placeholder="password")
+        div(class="form-group")
+            button(type="submit" class="btn btn-primary" ) Log In
