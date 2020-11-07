@@ -1,40 +1,11 @@
 extends ../layout
 
-block headscripts
-  //include chessboardjs
-  include ./chessboardjs
-  // include chessjs
-  include ./chessjs
-  //include the board
-  include ./board.pug
-  //include main controller
-  include ./sudoApp
-  // include socket
-  include ./clientSocket
-
 block content
-  div(class='col-sm-8' style="text-align:center;margin:auto;")
-    div(class="card my-2" style="width:15rem;margin:auto;")
-      div(class="card-body")
-        h5(id="opponentName") Opponent
-    div(id='board' style="width:450px; margin:auto")
-    input(class="form-control my-2" type="text" placeholder="Your Name" id="nameField" style="width:15rem;margin:auto;")
-  div(class='col-sm-4' style="text-align:center;margin:auto")
-    div(style="margin:auto")
-      button(id='readyBtn' type="button" class="btn btn-success btn-lg") Find Game
-
-    div(class="modal fade" id="invitationModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true")
-      div(class="modal-dialog")
-        div(class="modal-content")
-          div(class="modal-header")
-            h5(class="modal-title" id="staticBackdropLabel") Game Invitation
-            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
-              span(aria-hidden="true") &times;
-          div(class="modal-body")
-            p(id="invitationText") Game Invitation Recieved
-          div(class="modal-footer")
-            button(type="button" class="btn btn-secondary" data-dismiss="modal" id="invRejectBtn") Reject
-            button(type="button" class="btn btn-primary"   data-dismiss="modal" id="invAcceptBtn") Accept
+  div(class="container")
+    h1(class="display-4") Welcome to Sudo Chess
+    hr(class="my-4")
+    p You must be signed in to play. Please login or register to play.
+    a(class="btn btn-primary btn-lg" href="/users/login" role="button" style="margin:auto;" ) Login/Register
 
 
 

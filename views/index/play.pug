@@ -20,7 +20,9 @@ block content
             div(class="card-body")
                 h5(id="opponentName") Opponent
         div(id='board' style="width:450px; margin:auto")
-        input(class="form-control my-2" type="text" placeholder="Your Name" id="nameField" style="width:15rem;margin:auto;")
+        div(class="card my-2" style="width:15rem;margin:auto;")
+            div(class="card-body")
+                h5(id="nameField") #{user.profile.firstName}
     div(class='col-sm-4' style="text-align:center;margin:auto")
         div(style="margin:auto")
             button(id='readyBtn' type="button" class="btn btn-success btn-lg") Find Game

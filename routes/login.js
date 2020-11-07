@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index/login', { title: 'Sudo Chess' });
+    res.render('index/login');
 });
 
 module.exports = router;

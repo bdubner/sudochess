@@ -19,12 +19,12 @@ function SocketClient(){
     });
 
     readyBtn.click(function () {
-        socket.emit("invitation",nameField.val());
+        socket.emit("invitation",nameField.text());
         //socket.to(room).emit('sendReady',opponentColor);
     })
 
     acceptBtn.click(function (){
-        socket.emit("setupGame",inviterId,inviterName,nameField.val());
+        socket.emit("setupGame",inviterId,inviterName,nameField.text());
     })
 
 

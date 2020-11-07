@@ -44,7 +44,6 @@ exports = module.exports =function (io){
             }
 
             function sendMove(opponentId, move){
-                console.log("server opp id: " + opponentId +" move: " + move.to + "socket id: " + socket.id);
                 io.to(opponentId).emit("move",move);
             }
 
