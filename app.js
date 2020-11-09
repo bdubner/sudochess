@@ -7,7 +7,6 @@ var session = require("express-session");
 
 const auth = require("./auth")
 const middleware = require("./middleware");
-const serialport = require("serialport");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

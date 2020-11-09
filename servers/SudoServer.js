@@ -21,14 +21,16 @@ exports = module.exports =function (io){
             socket.on('invitation',invitation);
             socket.on('setupGame',setupGame);
             socket.on('sendMove',sendMove);
+            socket.on('joinRoomRequest',joinRoomRequest);
+            socket.on("leaveRoomRequest",leaveRoomRequest);
 
 
             function alertMessage(message){
                 io.emit("alertMessage",message);
             }
 
-            function invitation(name){
-                socket.broadcast.emit("invitation",name,socket.id);
+            function invitation(room, name){
+                socket.to(room).emit("invitation",name,socket.id);
             }
 
             function setupGame(opponentId, opponentName, myName){
@@ -47,11 +49,24 @@ exports = module.exports =function (io){
                 io.to(opponentId).emit("move",move);
             }
 
-
-
             function createRoom(){
                 const roomId = randomString(4);
+                console.log("creating room " + roomId);
+                socket.join(roomId);
                 socket.emit("roomToJoin",roomId);
+            }
+
+            function joinRoomRequest(roomId,name){
+                console.log(name + " is requesting to join " + roomId);
+                socket.join(roomId);
+                socket.emit("roomToJoin",roomId);
+                io.in(roomId).emit('playerJoined',name);
+            }
+
+            function leaveRoomRequest(roomId,name){
+                io.in(roomId).emit("playerLeft",name);
+                socket.leave(roomId);
+                socket.emit("leaveRoom");
             }
         }
     )

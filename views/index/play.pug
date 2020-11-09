@@ -24,8 +24,9 @@ block content
             div(class="card-body")
                 h5(id="nameField") #{user.profile.firstName}
     div(class='col-sm-4' style="text-align:center;margin:auto")
-        div(style="margin:auto")
-            button(id='readyBtn' type="button" class="btn btn-success btn-lg") Find Game
+        div(class="jumbotron jumbotron-fluid bg-transparent" style="height:100%")
+            div(class="overflow-auto p-3 mb-1 ml-3 mb-md-0 mr-md-3 border border-dark" id="chatBox" style="height:450px")
+            button(id='readyBtn' type="button" class="btn btn-success btn-lg mt-3") Find Game
 
         div(class="modal fade" id="invitationModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true")
             div(class="modal-dialog")

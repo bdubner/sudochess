@@ -22,15 +22,12 @@ html
         a(class="navbar-brand p-2 mr-2" href="/") SudoChess
         a(class="navbar-brand p-2 mr-auto" href="http://course.ece.cmu.edu/~ece500/projects/f20-teama7/") About
         if user == undefined
-          a(class="btn btn-outline-secondary p-2 mr-5" role="button" id="playBtn" href="/play") Play
           a(class="navbar-brand p-2" href="/users/login") Login / Register
-
         else
-          a(class="btn btn-outline-secondary p-2 mr-5" role="button" id="playBtn" href="/play") Play
           button(class="btn btn-outline-secondary p-2 mr-2" type="button" id="createRoomBtn") Create Room
           form(class="form-inline p-2")
-            input(class="form-control mr-sm-2" type="search" placeholder="Room ID" aria-label="Search")
-            button(class="btn btn-outline-success my-2 my-sm-0" type="button") Join Room
+            input(class="form-control mr-sm-2" type="search" placeholder="Room ID" aria-label="Search" id="roomIdField")
+            button(class="btn btn-outline-secondary my-2 my-sm-0" type="button" id="joinRoomBtn" ) Join Room
     div(class='container-md my-2')
       div(class='row')
         block content
