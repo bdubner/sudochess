@@ -86,8 +86,12 @@ function SocketClient(){
     });
 
     socket.on('move',function (move){
-        console.log("got move " + move);
         board.move(move);
+    });
+
+    socket.on('sudoMove',function (source, dest){
+        console.log("got sudo move " + source + " " + dest);
+        board.sudoMove(source,dest);
     });
 
     socket.on('playerJoined',function(name){

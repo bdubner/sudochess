@@ -151,6 +151,10 @@
             game.move(move);
             board.position(game.fen(),false);
         },
+        sudoMove:function(source,dest){
+            game.move({from:source,to:dest,promotion: 'q'});
+            board.position(game.fen(),false);
+        },
         reset:function(){
             game.reset();
             board.start();
