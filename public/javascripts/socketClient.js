@@ -17,6 +17,7 @@ function SocketClient(){
     var roomIdField = $('#roomIdField');
     var chatBox = $('#chatBox');
     var invitationModal = $('#invitationModal');
+    var userEmail = $('#userEmail').text();
 
     invitationModal.on('show.bs.modal',function (event){
         $('#invitationText').text(inviterName + " has invited you to a game");
@@ -32,7 +33,7 @@ function SocketClient(){
     })
 
     createBtn.click(function (){
-        socket.emit("createRoom");
+        socket.emit("createRoom",userEmail);
     });
 
     // joinButton will leave room if you are already in a room
@@ -43,7 +44,7 @@ function SocketClient(){
             socket.emit("leaveRoomRequest",roomId,name);
         }
         else{ // send request to join room
-            socket.emit("joinRoomRequest",roomId,name);
+            socket.emit("joinRoomRequest",roomId,name,userEmail);
         }
 
     });
@@ -89,9 +90,11 @@ function SocketClient(){
         board.move(move);
     });
 
-    socket.on('sudoMove',function (source, dest){
-        console.log("got sudo move " + source + " " + dest);
-        board.sudoMove(source,dest);
+    socket.on('sudoMove',function (color,source, dest){
+        if(board.getTurn() === color) {
+            console.log("got sudo move " + color + " " + source + " " + dest);
+            board.sudoMove(source, dest);
+        }
     });
 
     socket.on('playerJoined',function(name){
@@ -117,9 +120,6 @@ function SocketClient(){
         sendMove:function(move){
             console.log("sending move")
             socket.emit("sendMove",opponentId,move);
-        },requestNewGame:function(){
-
-            socket.emit("newGameRequest",room);
         }
     }
 }

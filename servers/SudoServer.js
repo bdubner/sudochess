@@ -1,6 +1,10 @@
 /**
  * sudochess server
 */
+let email2Room = new Map();
+let email2Game = new Map();
+let id2Email = new Map();
+
 function randomString(length){
     const chars = 'abcdefghijklmnopqrstuvwxyz01234566789'.split('');
     let str = '';
@@ -10,6 +14,8 @@ function randomString(length){
     }
     return str;
 }
+const messageServer = require("./MessageServer");
+messageServer(email2Game);
 
 exports = module.exports =function (io){
     io.on('connection', function (socket)
@@ -41,6 +47,11 @@ exports = module.exports =function (io){
 
                 console.log("server setup sender:" + senderId + "; receiver: " + opponentId)
 
+                let myEmail = id2Email.get(socket.id);
+                let gameRoom = email2Room.get(myEmail);
+                email2Game.set(myEmail,{room:gameRoom,color:senderColor});
+                let oppEmail = id2Email.get(opponentId);
+                email2Room.set(oppEmail,{room:gameRoom,color:receiverColor});
                 io.to(opponentId).emit("startGame",senderId,myName,receiverColor);
                 socket.emit("startGame",opponentId,opponentName,senderColor);
             }
@@ -49,15 +60,19 @@ exports = module.exports =function (io){
                 io.to(opponentId).emit("move",move);
             }
 
-            function createRoom(){
+            function createRoom(userEmail){
                 const roomId = randomString(4);
-                console.log("creating room " + roomId);
+                email2Room.set(userEmail,roomId);
+                id2Email.set(socket.id,userEmail);
+                console.log("creating room " + roomId + "for user " + userEmail);
                 socket.join(roomId);
                 socket.emit("roomToJoin",roomId);
             }
 
-            function joinRoomRequest(roomId,name){
-                console.log(name + " is requesting to join " + roomId);
+            function joinRoomRequest(roomId,name, userEmail){
+                console.log(name + "(" + userEmail + ") is requesting to join " + roomId);
+                email2Room.set(userEmail,roomId);
+                id2Email.set(socket.id,userEmail);
                 socket.join(roomId);
                 socket.emit("roomToJoin",roomId);
                 io.in(roomId).emit('playerJoined',name);

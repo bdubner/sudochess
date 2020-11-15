@@ -1,18 +1,21 @@
-exports = module.exports =function (){
+exports = module.exports =function (email2Game){
     const io = require('socket.io-emitter')({ host: '127.0.0.1', port: 6379 });
-    var zmq = require("zeromq"),
-        sock = zmq.socket("pull");
+    const zmq = require("zeromq");
 
-    sock.bindSync("tcp://127.0.0.1:3001");
-    console.log("Server connected to port 3001");
-    // setInterval(function(){
-    //     console.log("sending greetings")
-    //     io.emit('greetings', "message server");
-    // }, 5000);
+    async function run(){
+        const sock = new zmq.Pull;
+        await sock.bind("tcp://127.0.0.1:5555");
+        console.log("Listening for sudocomm on port 5555")
+        for await (const [msg] of sock) {
+            const move = msg.toString().split(' ');
+            const game = email2Game.get(move[0]);
+            const room = game['room'];
+            const color = game['color'].charAt(0);
 
-    sock.on("message", function(msg) {
-        const move = msg.toString().split(' ');
-        io.emit('sudoMove',move[0],move[1]);
-        console.log("move: %s", msg.toString());
-    });
+            io.to(room).emit('sudoMove',color,move[1],move[2]);
+            console.log("move: %s", msg.toString());
+        }
+    }
+
+    run();
 }

@@ -11,8 +11,7 @@ block headscripts
     include ./sudoApp
     // include socket
     include ./clientSocket
-    // include serialPort
-    include ./serialPort
+
 
 block content
     div(class='col-sm-8' style="text-align:center;margin:auto;")
@@ -23,6 +22,7 @@ block content
         div(class="card my-2" style="width:15rem;margin:auto;")
             div(class="card-body")
                 h5(id="nameField") #{user.profile.firstName}
+                p(id="userEmail" class="d-none") #{user.profile.login}
     div(class='col-sm-4' style="text-align:center;margin:auto")
         div(class="jumbotron jumbotron-fluid bg-transparent" style="height:100%")
             div(class="overflow-auto p-3 mb-1 ml-3 mb-md-0 mr-md-3 border border-dark" id="chatBox" style="height:450px")
