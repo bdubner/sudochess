@@ -2,8 +2,8 @@
  * sudochess server
 */
 let email2Room = new Map();
-let email2Game = new Map();
 let id2Email = new Map();
+let id2Sender = new Map();
 
 function randomString(length){
     const chars = 'abcdefghijklmnopqrstuvwxyz01234566789'.split('');
@@ -51,14 +51,18 @@ exports = module.exports =function (io){
                 console.log("server setup game" +
                     "\nsender: id=" + senderId + ",email=" + myEmail +
                     "\nreceiver: id=" + opponentId + ",email=" + oppEmail);
-                messageServer(5555,roomId,receiverColor);
+                let oppSender = messageServer(5555,roomId,receiverColor);
+                id2Sender.set(opponentId,oppSender);
                 io.to(opponentId).emit("startGame",senderId,myName,receiverColor,5555);
-                messageServer(5565,roomId,senderColor);
+                let mySender = messageServer(5565,roomId,senderColor);
+                id2Sender.set(socket.id,mySender);
                 socket.emit("startGame",opponentId,opponentName,senderColor,5565);
             }
 
             function sendMove(opponentId, move){
                 io.to(opponentId).emit("move",move);
+                let sender = id2Sender.get(opponentId);
+                sender.sendMoveToSudo(move.from,move.to);
             }
 
             function createRoom(userEmail){

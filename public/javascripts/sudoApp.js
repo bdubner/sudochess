@@ -1,6 +1,5 @@
 var board;
 var socket;
-var sudoComm;
 
 var init = function (){
     socket = SocketClient();
