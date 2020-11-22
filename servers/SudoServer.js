@@ -15,7 +15,6 @@ function randomString(length){
     return str;
 }
 const messageServer = require("./MessageServer");
-messageServer(email2Game);
 
 exports = module.exports =function (io){
     io.on('connection', function (socket)
@@ -45,15 +44,17 @@ exports = module.exports =function (io){
                 let senderColor = isSenderWhite ? 'white' : 'black';
                 let receiverColor = isSenderWhite ? 'black' : 'white';
 
-                console.log("server setup sender:" + senderId + "; receiver: " + opponentId)
 
                 let myEmail = id2Email.get(socket.id);
-                let gameRoom = email2Room.get(myEmail);
-                email2Game.set(myEmail,{room:gameRoom,color:senderColor});
+                let roomId = email2Room.get(myEmail);
                 let oppEmail = id2Email.get(opponentId);
-                email2Room.set(oppEmail,{room:gameRoom,color:receiverColor});
-                io.to(opponentId).emit("startGame",senderId,myName,receiverColor);
-                socket.emit("startGame",opponentId,opponentName,senderColor);
+                console.log("server setup game" +
+                    "\nsender: id=" + senderId + ",email=" + myEmail +
+                    "\nreceiver: id=" + opponentId + ",email=" + oppEmail);
+                messageServer(5555,roomId,receiverColor);
+                io.to(opponentId).emit("startGame",senderId,myName,receiverColor,5555);
+                messageServer(5565,roomId,senderColor);
+                socket.emit("startGame",opponentId,opponentName,senderColor,5565);
             }
 
             function sendMove(opponentId, move){
@@ -87,3 +88,6 @@ exports = module.exports =function (io){
     )
 }
 
+function logMapElements(value, key, map) {
+    console.log(`m[${key}] = ${value}`);
+}

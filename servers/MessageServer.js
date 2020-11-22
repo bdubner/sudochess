@@ -1,21 +1,23 @@
-exports = module.exports =function (email2Game){
+exports = module.exports =function (port, room, color){
     const io = require('socket.io-emitter')({ host: '127.0.0.1', port: 6379 });
     const zmq = require("zeromq");
+    const rec = new zmq.Pull;
 
-    async function run(){
-        const sock = new zmq.Pull;
-        await sock.bind("tcp://127.0.0.1:5555");
-        console.log("Listening for sudocomm on port 5555")
-        for await (const [msg] of sock) {
+    async function receive(){
+        await rec.bind("tcp://127.0.0.1:" + port);
+        console.log("Listening for sudocomm on port " + port + ", color " + color + ", room " + room)
+        for await (const [msg] of rec) {
             const move = msg.toString().split(' ');
-            const game = email2Game.get(move[0]);
-            const room = game['room'];
-            const color = game['color'].charAt(0);
-
-            io.to(room).emit('sudoMove',color,move[1],move[2]);
-            console.log("move: %s", msg.toString());
+            io.to(room).emit('sudoMove',color.charAt(0),move[0],move[1]);
+            console.log("message: %s", msg.toString());
         }
     }
+    receive().catch(retryRec);
 
-    run();
+    async function retryRec(){
+        await rec.unbind("tcp://127.0.0.1:" + port)
+            .then(receive)
+            .catch(retryRec);
+    }
 }
+

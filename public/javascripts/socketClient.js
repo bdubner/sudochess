@@ -18,6 +18,7 @@ function SocketClient(){
     var chatBox = $('#chatBox');
     var invitationModal = $('#invitationModal');
     var userEmail = $('#userEmail').text();
+    var portBtn   = $('#portBtn');
 
     invitationModal.on('show.bs.modal',function (event){
         $('#invitationText').text(inviterName + " has invited you to a game");
@@ -77,13 +78,15 @@ function SocketClient(){
         joinBtn.text("Join Room");
     });
 
-    socket.on('startGame',function (otherId,name,myColor){
+    socket.on('startGame',function (otherId,name,myColor,sudoPort){
         readyBtn.hide();
         opponentNameField.text(name);
         console.log("started game against " + name + " with " + myColor)
         board.reset();
         board.setPlayerColor(myColor);
         opponentId = otherId;
+        portBtn.text(sudoPort);
+        portBtn.show();
     });
 
     socket.on('move',function (move){

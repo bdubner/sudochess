@@ -23,6 +23,8 @@ block content
             div(class="card-body")
                 h5(id="nameField") #{user.profile.firstName}
                 p(id="userEmail" class="d-none") #{user.profile.login}
+        button(id='portBtn' type="button" class="btn btn-secondary") Port
+
     div(class='col-sm-4' style="text-align:center;margin:auto")
         div(class="jumbotron jumbotron-fluid bg-transparent" style="height:100%")
             div(class="overflow-auto p-3 mb-1 ml-3 mb-md-0 mr-md-3 border border-dark" id="chatBox" style="height:450px")
