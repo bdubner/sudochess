@@ -33,12 +33,21 @@ exports = module.exports =function (port, room, color){
             .catch(retrySend);
     }
 
+    async function clearConnections(){
+        let sendPort = port + 1;
+        await sender.unbind("tcp://127.0.0.1:" + sendPort);
+        await rec.unbind("tcp://127.0.0.1:" + port);
+    }
+
     receive().catch(retryRecieve);
     setupSend().catch(retrySend);
 
     return {
         sendMoveToSudo: async function (source, destination) {
             await sender.send(source + " " + destination);
+        },
+        clearConnections: async function (){
+            await clearConnections();
         }
     }
 }

@@ -28,6 +28,7 @@ exports = module.exports =function (io){
             socket.on('sendMove',sendMove);
             socket.on('joinRoomRequest',joinRoomRequest);
             socket.on("leaveRoomRequest",leaveRoomRequest);
+            socket.on("disconnecting",socketDisconnecting);
 
 
             function alertMessage(message){
@@ -40,6 +41,8 @@ exports = module.exports =function (io){
 
             function setupGame(opponentId, opponentName, myName){
                 let senderId = socket.id;
+                clearUser(socket.id);
+                clearUser(opponentId);
                 let isSenderWhite = Math.random() < 0.5;
                 let senderColor = isSenderWhite ? 'white' : 'black';
                 let receiverColor = isSenderWhite ? 'black' : 'white';
@@ -86,7 +89,20 @@ exports = module.exports =function (io){
             function leaveRoomRequest(roomId,name){
                 io.in(roomId).emit("playerLeft",name);
                 socket.leave(roomId);
+                clearUser(socket.id);
                 socket.emit("leaveRoom");
+            }
+
+            function clearUser(id){
+                let sender = id2Sender.get(id);
+                id2Sender.delete(id);
+                if(sender) {
+                    sender.clearConnections().catch();
+                }
+            }
+
+            function socketDisconnecting(){
+                clearUser(socket.id);
             }
         }
     )
