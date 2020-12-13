@@ -48,5 +48,38 @@ NOTES:
 - To delete VM use `vagrant destroy`
 
 After the above steps for either option, you should be able to visit http://localhost:3000/ and see the
- SudoChess home page
+ SudoChess home page. (See Using Web App section for how to use web app )
 
+## Using SudoCommunicator
+
+1. `cd sudocommunicator`
+
+2. `npm install`
+
+3. After creating a game, run 
+`node send_move.json [port]`
+where [port] is the port number displayed below your
+name on the web app.
+
+you will be displayed the moves sent from the server in stdout
+and you can send moves to the server by entering 
+`src dest` where src and dest are square locations (ie. `e2 e4`)
+
+## Starting a game on web app
+1. go to (chrome tab) http://localhost:3000/ 
+
+2. click "Login / Register"
+
+3. Create new user by clicking "Sign Up" at bottom of prompted page
+
+4. Launch incognito tab 
+
+5. repeat steps 1-4 to create 2nd user (or use user:vyas@fake.com password:asdf1234ASDF)
+
+6. In first tab click 'Create Room' button in Nav Bar
+
+7. Copy room to incognito tab and click 'Join Room' button
+
+8. In incognito tab, click 'Find Game' button
+
+9. In first tab, click accept
