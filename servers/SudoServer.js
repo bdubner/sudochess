@@ -43,7 +43,7 @@ exports = module.exports =function (io){
                 let senderId = socket.id;
                 clearUser(socket.id);
                 clearUser(opponentId);
-                let isSenderWhite = Math.random() < 0.5;
+                let isSenderWhite = true;
                 let senderColor = isSenderWhite ? 'white' : 'black';
                 let receiverColor = isSenderWhite ? 'black' : 'white';
 
